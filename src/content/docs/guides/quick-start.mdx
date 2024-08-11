@@ -1,0 +1,47 @@
+---
+title: Quick Start
+description: Get started with React-Plug in just a few steps.
+---
+
+import { FileTree, Steps } from "@astrojs/starlight/components";
+
+<Steps>
+
+1. Install [`cargo-generate`](https://github.com/cargo-generate/cargo-generate), if you haven't already
+
+2. Generate a new React-Plug plugin.
+
+   ```sh
+   cargo generate gh:exa04/react-plug-template
+   ```
+
+</Steps>
+
+Now, you have a new plugin with - roughly - the following file structure:
+
+<FileTree>
+
+- gui/ GUI code
+  - src/
+    - bindings/ Auto-generated TS bindings
+    - App.tsx
+    - ...
+  - package.json
+  - ...
+- src/ Plugin code
+  - lib.rs
+  - params.rs
+- xtask/
+- Cargo.toml
+
+</FileTree>
+
+You can build and bundle your plugin with:
+
+```sh
+cargo xtask bundle <your-plugin>
+```
+
+This will bundle your plugin to `target/bundled/<your-plugin>`. You can now load this plugin in your DAW.
+
+🎉 That's it! You're ready to start developing your plugin!
