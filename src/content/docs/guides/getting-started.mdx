@@ -10,7 +10,7 @@ import { Aside, FileTree } from "@astrojs/starlight/components";
   might end up being outdated.
 </Aside>
 
-Welcome to the "Getting Started" guide. This guide offers a fairly detailed look at React-Plug's concepts. If you want to check out what a plugin using it looks like, try the [example](example) plugin. It's assumed that you already know the very basics of <a target="_blank" href="https://github.com/robbert-vdh/nih-plug">nih-plug</a> and <a target="_blank" href="https://reactjs.org">React</a> going into this.
+This guide offers a fairly detailed look at React-Plug's basic concepts. It's assumed that you already know the very basics of <a target="_blank" href="https://github.com/robbert-vdh/nih-plug">nih-plug</a> and <a target="_blank" href="https://reactjs.org">React</a> going into this.
 
 After [generating a new plugin](/guides/quick-start), change directories into your freshly generated plugin.
 
@@ -162,27 +162,28 @@ editor using `with_message_handler`. The message handler lets you react to inbou
 messages from the GUI by passing a closure to it. We'll just respond with a `Pong`
 by sending it via the editor channel.
 
-```rust title="src/lib.rs" ins={15-17}
-    static EDITOR_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/gui/dist");
+```rust title="src/lib.rs" ins={16-18}
+static EDITOR_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/gui/dist");
 
-    fn editor(&mut self, _async_executor: AsyncExecutor<Self>)
-        -> Option<Box<dyn Editor>>
-    {
-        let sender = self.editor_channel.0.clone();
+fn editor(&mut self, _async_executor: AsyncExecutor<Self>)
+    -> Option<Box<dyn Editor>>
+{
+    let sender = self.editor_channel.0.clone();
 
-        ReactPlugEditor::new::<GuiMessage>(
-            self.params.clone(),
-            &EDITOR_DIR,
-            self.editor_channel.clone(),
-        )
-        .with_developer_mode(true)
-        .with_message_handler(move |message| {
-            if let GuiMessage::Ping = message {
-                sender.send(PluginMessage::Pong).unwrap();
-            }
-        })
-        .into()
-    }
+    ReactPlugEditor::new::<GuiMessage>(
+        self.params.clone(),
+        &EDITOR_DIR,
+        self.editor_channel.clone(),
+        (800, 600)
+    )
+    .with_developer_mode(true)
+    .with_message_handler(move |message| {
+        if let GuiMessage::Ping = message {
+            sender.send(PluginMessage::Pong).unwrap();
+        }
+    })
+    .into()
+}
 ```
 
 There are a lot more things you can do with the editor by chaining more methods. We won't go into that here, though. Let's instead move on to the actual GUI.
@@ -265,6 +266,16 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 ```
 
 </details>
+
+If you want to make rapid changes to your GUI without constantly re-compiling your plugin, you can use the `dev` command.
+
+```bash
+cargo xtask dev <your-plugin>
+```
+
+Just load the bundled plugin in your preferred DAW or host. Then, whenever you make changes to your GUI, they'll be reflected in real-time.
+
+The command will build a development version of your plugin that doesn't include the GUI. Instead, this version loads it from a local hot-reloading server. This way, you can make changes to your GUI and see them reflected in real-time. This version of your plugin is obviously not suitable for distribution, but it's great for development.
 
 ### Parameters
 

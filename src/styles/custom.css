@@ -2,6 +2,7 @@
 :root {
     --sl-color-accent-low: #00273d;
     --sl-color-accent: #0071a7;
+    --sl-color-accent-tr: #36abffaa;
     --sl-color-accent-high: #92d1fe;
     --sl-color-white: #ffffff;
     --sl-color-gray-1: #ebeeef;
@@ -11,11 +12,13 @@
     --sl-color-gray-5: #33393c;
     --sl-color-gray-6: #22282a;
     --sl-color-black: #16191a;
+    --sl-font: "Inter", sans-serif;
 }
 /* Light mode colors. */
 :root[data-theme="light"] {
     --sl-color-accent-low: #b0deff;
     --sl-color-accent: #0073aa;
+    --sl-color-accent-tr: #0073aaaa;
     --sl-color-accent-high: #003653;
     --sl-color-white: #16191a;
     --sl-color-gray-1: #22282a;
@@ -26,4 +29,21 @@
     --sl-color-gray-6: #ebeeef;
     --sl-color-gray-7: #f5f6f7;
     --sl-color-black: #ffffff;
+}
+h1,
+h2,
+h3,
+h4 {
+    font-family: "InterDisplay", sans-serif;
+}
+
+[data-has-hero] .page {
+    background:
+        linear-gradient(215deg, var(--sl-color-accent-tr), transparent 40%),
+        radial-gradient(var(--sl-color-accent-tr), transparent 40%) no-repeat -90vw -40vh /
+            150vw 200vh;
+}
+
+[data-has-hero] .hero > img {
+    filter: drop-shadow(0 0 3rem var(--sl-color-accent-tr));
 }

@@ -662,3 +662,204 @@ function App() {
 
 export default App;
 ```
+
+## EnumParam
+
+A parameter whose value is an enum variant.
+
+### id
+
+`string`
+
+The ID of the parameter.
+
+```tsx "waveform.id"
+import { usePluginContext } from "./bindings/PluginProvider";
+
+function App() {
+  const ctx = usePluginContext();
+  const waveform = ctx.parameters.waveform;
+
+  return <div>{waveform.id}</div>;
+}
+
+export default App;
+```
+
+### name
+
+`string`
+
+The name of the parameter.
+
+```tsx "waveform.name"
+import { usePluginContext } from "./bindings/PluginProvider";
+
+function App() {
+  const ctx = usePluginContext();
+  const waveform = ctx.parameters.waveform;
+
+  return (
+    <div>
+      {waveform.name}: {waveform.value}
+    </div>
+  );
+}
+
+export default App;
+```
+
+### value
+
+`string`
+
+The current value of the parameter, as the name of the selected enum variant.
+
+```tsx "waveform.value"
+import { usePluginContext } from "./bindings/PluginProvider";
+
+function App() {
+  const ctx = usePluginContext();
+  const waveform = ctx.parameters.waveform;
+
+  return (
+    <div>
+      {waveform.name}: {waveform.value}
+    </div>
+  );
+}
+
+export default App;
+```
+
+### variants
+
+`{[id: string]: string}`
+
+An object with keys as the identifiers of all possible enum variants and values as their names.
+
+**Example:** Creating a dropdown to select the value of a parameter.
+
+```tsx "waveform.variants"
+import { usePluginContext } from "./bindings/PluginProvider";
+
+function App() {
+  const ctx = usePluginContext();
+  const waveform = ctx.parameters.waveform;
+
+  return (
+    <select
+      value={waveform.rawValue}
+      onChange={(e) => waveform.setValue(e.target.value)}
+    >
+      {Object.entries(waveform.variants).map((variant) => (
+        <option value={variant[0]}>{variant[1]}</option>
+      ))}
+    </select>
+  );
+}
+
+export default App;
+```
+
+To clarify: A parameter `waveform` that is defined as such:
+
+```rust
+rp_params! {
+    ExampleParams {
+        waveform: EnumParam {
+            name: "Waveform",
+            value: Sine,
+            variants: {
+                Sine: "Sine Wave",
+                Square: "Square Wave",
+                WhiteNoise: "White Noise",
+            },
+        },
+    }
+}
+```
+
+Would have the following `variants`:
+
+```json
+// waveform.variants
+{
+  "Sine": "Sine Wave",
+  "Square": "Square Wave",
+  "WhiteNoise": "White Noise"
+}
+```
+
+### defaultValue
+
+`string`
+
+The default value of the parameter, as the identifier of the selected enum variant.
+
+**Example:** Setting the value of a parameter to its default value.
+
+```tsx "waveform.defaultValue"
+import { usePluginContext } from "./bindings/PluginProvider";
+
+function App() {
+  const ctx = usePluginContext();
+  const waveform = ctx.parameters.waveform;
+
+  return (
+    <button onClick={() => waveform.setValue(waveform.defaultValue)}>
+      Reset
+    </button>
+  );
+}
+
+export default App;
+```
+
+### rawValue
+
+`string`
+
+The raw value of the parameter, as the identifier of the selected enum variant.
+
+```tsx "waveform.rawValue"
+import { usePluginContext } from "./bindings/PluginProvider";
+
+function App() {
+  const ctx = usePluginContext();
+  const waveform = ctx.parameters.waveform;
+
+  return (
+    <div>
+      {waveform.name}: {waveform.rawValue}
+    </div>
+  );
+}
+
+export default App;
+```
+
+### setValue
+
+`function(value: string): void`
+
+Sets the value of the parameter by the identifier of the selected enum variant.
+
+**Example:** Setting the value of a parameter to its default value.
+
+```tsx "waveform.setValue"
+import { usePluginContext } from "./bindings/PluginProvider";
+
+function App() {
+  const ctx = usePluginContext();
+  const waveform = ctx.parameters.waveform;
+
+  return (
+    <button onClick={() => waveform.setValue(waveform.defaultValue)}>
+      Reset
+    </button>
+  );
+}
+
+export default App;
+```

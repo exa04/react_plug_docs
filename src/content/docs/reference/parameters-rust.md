@@ -541,3 +541,95 @@ rp_params! {
     }
 }
 ```
+
+## EnumParam
+
+An enum parameter. Requires a `name`, a `value`, and `variants`.
+
+```rust {3-11}
+rp_params! {
+    ExampleParams {
+        waveform: EnumParam {
+            name: "Waveform",
+            value: Sine,
+            variants: {
+                Sine: "Sine Wave",
+                Square: "Square Wave",
+                WhiteNoise: "White Noise",
+            },
+        },
+    }
+}
+```
+
+### name
+
+`impl Into<String>`
+
+The name of the parameter. This is the name that will be displayed in the GUI.
+
+```rust {4}
+rp_params! {
+    ExampleParams {
+        waveform: EnumParam {
+            name: "Waveform",
+            value: Sine,
+            variants: {
+                Sine: "Sine Wave",
+                Square: "Square Wave",
+                WhiteNoise: "White Noise",
+            },
+        },
+    }
+}
+```
+
+### value
+
+The initial value of the parameter.
+
+```rust {5}
+rp_params! {
+    ExampleParams {
+        waveform: EnumParam {
+            name: "Waveform",
+            value: Sine,
+            variants: {
+                Sine: "Sine Wave",
+                Square: "Square Wave",
+                WhiteNoise: "White Noise",
+            },
+        },
+    }
+}
+```
+
+### variants
+
+All possible values the enum parameter may assume. Defined with the variant's **identifier** as the **key** and its **name** as the **value**.
+
+```rust {6-10}
+rp_params! {
+    ExampleParams {
+        waveform: EnumParam {
+            name: "Waveform",
+            value: Sine,
+            variants: {
+                Sine: "Sine Wave",
+                Square: "Square Wave",
+                WhiteNoise: "White Noise",
+            },
+        },
+    }
+}
+```
+
+### Optional properties
+
+The optional properties of a `EnumParam` are basically all the optional modifiers of `nih_plug`'s [EnumParam](https://nih-plug.robbertvanderhelm.nl/nih_plug/params/enums/struct.EnumParam.html).
+
+#### poly_moulation_id
+
+`u32`
+
+This ID is used to uniquely identify this parameter in `nih_plug`'s [`NoteEvent::PolyModulation`](https://nih-plug.robbertvanderhelm.nl/nih_plug/midi/enum.NoteEvent.html#variant.PolyModulation) events, and must thus be unique between all polyphonically modulatable parameters.

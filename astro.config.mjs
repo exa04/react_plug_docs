@@ -11,9 +11,12 @@ export default defineConfig({
         dark: "./src/assets/logo_dark.svg",
         replacesTitle: true,
       },
-      customCss: ["./src/styles/custom.css"],
+      customCss: ["./src/styles/custom.css", "./src/fonts/inter.css"],
       social: {
         github: "https://github.com/exa04/react_plug",
+      },
+      components: {
+        SocialIcons: "./src/components/HeaderLinks.astro",
       },
       sidebar: [
         {

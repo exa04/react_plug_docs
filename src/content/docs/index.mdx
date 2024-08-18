@@ -3,9 +3,10 @@ title: Build audio plug-ins with React and Rust.
 description: Build audio plug-ins with React and Rust.
 template: splash
 hero:
-  tagline: React-Plug is the simplest way of creating a VST3 / CLAP plug-in using Rust, with a React UI.
+  tagline: React-Plug is the easiest way of creating a VST3 / CLAP plug-in with a React UI and Rust backend.
   image:
-    file: ../../assets/logo_circle.svg
+    dark: "../../assets/logo_circle_dark.svg"
+    light: "../../assets/logo_circle_light.svg"
   actions:
     - text: Quick Start
       link: /guides/quick-start/
@@ -14,15 +15,16 @@ hero:
     - text: GitHub
       link: https://github.com/exa04/react_plug
       icon: github
+      variant: secondary
 ---
 
-import { Aside, Card, CardGrid, Steps } from "@astrojs/starlight/components";
+import {Aside, Card, CardGrid, Steps} from "@astrojs/starlight/components";
 import Main from "../../components/Main.astro";
 
-<Aside type="caution" title="API Stability">
-  This framework is still very early in development. Some breaking changes might
-  still be to come. Definitely do not use it in production!
-</Aside>
+:::caution[API Stability]
+This framework is still very early in development. Some breaking changes might
+still be to come. Definitely do not use it in production!
+:::
 
 ## Overview
 
@@ -35,15 +37,16 @@ plugin-to-GUI communication, and more.
 React-Plug is based on [`nih-plug-webview`](https://github.com/httnn/nih-plug-webview) and works on top of [`nih-plug`](https://github.com/robbert-vdh/nih-plug).
 
 <CardGrid>
-  <Card title="Built-In React Parameter API" icon="setting">
-    Once you define your plugin's parameters in Rust, they're automatically
-    available inside your GUI as typed objects.
-  </Card>
-  <Card title="Custom IPC Messages" icon="comment">
-    Define your IPC messages once in your Rust code, and then handle and send
-    them from both your GUI and plugin code.
-  </Card>
-  {/* <Card title="GUI Hot-Reloading" icon="seti:react">
+    <Card title="Built-In React Parameter API" icon="setting">
+        Once you define your plugin's parameters in Rust, they're automatically
+        available inside your GUI as typed objects.
+    </Card>
+    <Card title="Custom IPC Messages" icon="comment">
+        Define your IPC messages once in your Rust code, and then handle and
+        send
+        them from both your GUI and plugin code.
+    </Card>
+    {/* <Card title="GUI Hot-Reloading" icon="seti:react">
     GUI Hot-reloading
   </Card> */}
 </CardGrid>

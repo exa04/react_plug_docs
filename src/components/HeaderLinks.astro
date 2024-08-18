@@ -1,0 +1,16 @@
+---
+import type { Props } from "@astrojs/starlight/props";
+import Default from "@astrojs/starlight/components/SocialIcons.astro";
+import { LinkButton } from "@astrojs/starlight/components";
+---
+
+<style>
+    .link {
+        color: var(--sl-color-text-accent);
+        text-decoration: none;
+    }
+</style>
+
+<a href="/guides/quick-start" class="link">Docs</a>
+<a href="/releases/" class="link">Release Notes</a>
+<Default {...Astro.props}><slot /></Default>

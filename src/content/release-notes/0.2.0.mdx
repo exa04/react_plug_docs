@@ -1,0 +1,64 @@
+---
+title: Pre-Release 0.2.0
+slug: "0.2.0"
+semver: 0.2.0
+date: 2024-08-20
+description: Hot-reloading, better window sizing, and more.
+---
+
+React-Plug 0.2.0 is here! This release brings hot-reloading, better window sizing, and implements some `nih-plug` features that were previously missing in React-Plug.
+
+:::caution[Backwards-Incompatibility]
+Upgrading from an older version? You may need to make some changes to your code. Read the [Breaking Changes](#breaking-changes) section!
+:::
+
+## Hot-Reloading
+
+You can now create a `dev` bundle of your plugin. This version of your plugin will continuously hot-reload its UI you change its source code. No more constant compiling and re-compiling just to iterate on your UI, yay! To bundle your plugin for dev mode, just run this command:
+
+```sh
+cargo xtask dev <your-plugin>
+```
+
+The command will first bundle a development version of your plugin that loads its GUI from a local web server on your machine. Just open the built plugin in your DAW and see your UI change as you edit it!
+
+:::note
+While working on your plugin, don't close your terminal or exit out of the running cargo xtask command! This will halt the local dev server. If you accidentally stopped and need to restart the server, run:
+
+```sh
+cargo xtask dev-server <your-plugin>
+```
+
+:::
+
+## Window Sizing
+
+## Other Changes
+
+A few minor changes were also made to React-Plug.
+
+- The default plugin window size can now be set
+- Enum parameters are now supported
+- Reversed parameter ranges are now supported
+
+### Breaking Changes
+
+The editor now needs to take in a default window size as a tuple of `u32`s. To
+update your plugin, simply add the following line to your `editor` function:
+
+```diff lang="rust" title="src/lib.rs"
+    fn editor(&mut self, _async_executor: AsyncExecutor<Self>)
+        -> Option<Box<dyn Editor>>
+    {
+        let sender = self.editor_channel.0.clone();
+
+        ReactPlugEditor::new::<GuiMessage>(
+            self.params.clone(),
+            &EDITOR_DIR,
+            self.editor_channel.clone(),
++           (800, 600),
+        )
+        .with_developer_mode(true)
+        .into()
+    }
+```

@@ -1,0 +1,14 @@
+---
+import { Badge, CardGrid, LinkCard } from "@astrojs/starlight/components";
+import StarlightPage from "@astrojs/starlight/components/StarlightPage.astro";
+import ReleaseInfo from "../../components/ReleaseInfo.astro";
+import { getCollection, getEntry } from "astro:content";
+
+const releaseNotes = await getCollection("release-notes");
+
+const latestRelease = releaseNotes.sort(
+    (a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf(),
+)[0];
+
+return Astro.redirect("/releases/" + latestRelease.slug);
+---

@@ -1,0 +1,12 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+    data: CollectionEntry<"release-notes">;
+}
+
+const { data: entry } = Astro.props;
+const { Content } = await entry.render();
+---
+
+<Content />
