@@ -17,7 +17,7 @@ const { Content } = await entry.render();
 const releaseNotes = await getCollection("release-notes");
 ---
 
-<style global>
+<style is:global>
     #starlight__sidebar {
         font-feature-settings: "tnum";
     }
@@ -33,11 +33,11 @@ const releaseNotes = await getCollection("release-notes");
     }}
     sidebar={
         releaseNotes
-            .sort((a, b) => new Date(b.data.date) - new Date(a.data.date))
+            .sort((a, b) => Date.parse(b.data.date).valueOf() - Date.parse(a.data.date).valueOf())
             .map((releaseNote) => ({
                 label: releaseNote.data.title,
                 link: `/releases/${releaseNote.slug}`,
-            })),
+            }))
     }
 >
     <Content>
