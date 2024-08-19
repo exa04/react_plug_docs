@@ -3,7 +3,7 @@ title: Build audio plug-ins with React and Rust.
 description: Build audio plug-ins with React and Rust.
 template: splash
 hero:
-  tagline: React-Plug is the easiest way of creating a VST3 / CLAP plug-in with a React UI and Rust backend.
+  tagline: React-Plug is a batteries-included framework for building audio plugins with a React GUI and Rust backend.
   image:
     dark: "../../assets/logo_circle_dark.svg"
     light: "../../assets/logo_circle_light.svg"
@@ -18,35 +18,124 @@ hero:
       variant: secondary
 ---
 
-import {Aside, Card, CardGrid, Steps} from "@astrojs/starlight/components";
-import Main from "../../components/Main.astro";
+import {
+    Card, CardGrid, LinkCard, LinkButton, TabItem, Tabs,
+} from "@astrojs/starlight/components";
 
-:::caution[API Stability]
-This framework is still very early in development. Some breaking changes might
-still be to come. Definitely do not use it in production!
-:::
+<section className="mb-32 flex flex-col gap-4">
+    <div className="flex gap-4 items-stretch max-xl:flex-col">
+        <div>
+            <div className="text-gray-500 dark:text-gray-400 text-lg">Why React-Plug?</div>
+            <h2 className="!mt-0 xl:!text-5xl">React-Plug is the simplest way of creating a VST3 / CLAP plug-in with Rust and React.</h2>
+            <p className="text-gray-500 dark:text-gray-400 text-lg">React-Plug is a framework that works on top of [`nih-plug`](github.com/robbert-vdh/nih-plug). It offers a really streamlined way to create Rust / React audio plugins. Also, it provides strongly typed TypeScript bindings for your Rust code and leverages code-generating macros for a delightful developer experience.</p>
 
-## Overview
+            :::caution[Stability]
+            This framework is still very early in development. Do not use it in production!
+            :::
+        </div>
+    </div>
+</section>
 
-React-Plug is a crate that allows you to build Rust audio plugins with React
-GUIs. It offers the most simple and batteries-included way of creating VST3 /
-CLAP plugins with a web UI. It renders your React code through your operating
-system's built-in WebView, bundles and includes it, automagically handles
-plugin-to-GUI communication, and more.
+<section className="mb-32 flex flex-col gap-4">
+    <div className="flex gap-4 xl:items-center justify-between max-xl:flex-col-reverse overflow-auto">
+        <div className="">
+            <div className="text-gray-500 dark:text-gray-400 text-lg">Parameters</div>
+            <h2 className="!mt-0 max-w-lg">Define parameters once in Rust. Directly use them inside React.</h2>
+            <p className="text-gray-500 dark:text-gray-400 max-w-xl">When you define your parameters, React-Plug handles the rest, generating a plugin provider that you can simply import in your UI code. Its parameters already include your chosen formatting, range, scaling, and more.</p>
+        </div>
+        <div>
+            <img src="/icon-knob-light.svg" className="w-24 xl:w-40 aspect-square dark:hidden"/>
+            <img src="/icon-knob-dark.svg" className="w-24 xl:w-40 aspect-square !hidden dark:!block"/>
+        </div>
+    </div>
 
-React-Plug is based on [`nih-plug-webview`](https://github.com/httnn/nih-plug-webview) and works on top of [`nih-plug`](https://github.com/robbert-vdh/nih-plug).
+    <div className="flex gap-4 max-xl:flex-col-reverse">
+        <Tabs>
+            <TabItem label="Plugin" icon="seti:rust" className="mt-0">
+                Define your plugin's parameters and their default values in Rust, using a really straight-forward declarative syntax.
 
-<CardGrid>
-    <Card title="Built-In React Parameter API" icon="setting">
-        Once you define your plugin's parameters in Rust, they're automatically
-        available inside your GUI as typed objects.
-    </Card>
-    <Card title="Custom IPC Messages" icon="comment">
-        Define your IPC messages once in your Rust code, and then handle and
-        send
-        them from both your GUI and plugin code.
-    </Card>
-    {/* <Card title="GUI Hot-Reloading" icon="seti:react">
-    GUI Hot-reloading
-  </Card> */}
-</CardGrid>
+                ```rust title="src/params.rs" {3-14}
+                rp_params! {
+                    MyPluginParams {
+                        gain: FloatParam {
+                            name: "Gain",
+                            value: util::db_to_gain(0.0),
+                            range: FloatRange::Linear {
+                                min: util::db_to_gain(-60.0),
+                                max: util::db_to_gain(0.0),
+                            },
+                            smoother: SmoothingStyle::Logarithmic(50.0),
+                            unit: " dB",
+                            value_to_string: formatters::v2s_f32_gain_to_db(2),
+                            string_to_value: formatters::s2v_f32_gain_to_db(),
+                        },
+                    }
+                }
+                ```
+            </TabItem>
+            <TabItem label="GUI" icon="seti:react">
+                Using the auto-generated [`PluginContext`](/reference/plugin-context), access your parameters in your React code. Even scaling and formatting are already there!
+
+                ```tsx title="gui/src/App.tsx" "usePluginContext().parameters.gain"
+                function App() {
+                    const gain = usePluginContext().parameters.gain;
+
+                    return <>
+                        <div>{gain.name}: {gain.value}</div>
+                        <input type="range" className="slider"
+                               min={gain.range.getMin()}
+                               max={gain.range.getMax()}
+                               value={gain.rawValue}
+                               step={0.001}
+                               onChange={e => {
+                                   gain.setValue(Number(e.target.value))
+                               }}
+                        />
+                    </>;
+                }
+                ```
+            </TabItem>
+        </Tabs>
+        <div className="xl:px-24 max-xl:py-8 flex items-center justify-center flex-col flex-grow-0 flex-shrink-0 xl:w-min bg-gray-100 border border-gray-300 dark:bg-gray-800 dark:border-gray-700 overflow-hidden not-content !mt-0">
+            <div className="bg-gray-50 dark:bg-gray-800 border rounded-xl border-gray-300 dark:border-gray-700 dark:outline dark:outline-1 dark:outline-gray-950 select-none shadow-xl dark:shadow-black/30">
+                <div className="h-6 flex items-center border-b dark:border-black relative">
+                    <div className="flex gap-1 ml-1.5">
+                        <div className="w-3.5 h-3.5 bg-gray-300 dark:bg-gray-500 rounded-lg"/>
+                        <div className="w-3.5 h-3.5 bg-gray-300 dark:bg-gray-500 rounded-lg"/>
+                        <div className="w-3.5 h-3.5 bg-gray-300 dark:bg-gray-500 rounded-lg"/>
+                    </div>
+                    <div className="text-sm font-medium text-gray-500 absolute w-full text-center">Gain Plugin</div>
+                </div>
+                <div className="px-8 py-6">
+                    <div>Gain: -4.92dB</div>
+                    <input type="range" className="w-[160px]" max={1} min={0} value={0.56} step={0.001} disabled={true}/>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section className="mb-32 flex flex-col gap-4">
+    <div className="flex gap-4 xl:items-center justify-between max-xl:flex-col-reverse">
+        <div className="">
+            <div className="text-gray-500 dark:text-gray-400 text-lg">Messages</div>
+            <h2 className="!mt-0 max-w-lg">Define messages for<br/>plugin-to-GUI communication</h2>
+            <p className="text-gray-500 dark:text-gray-400 max-w-xl">For updates and state that aren't related to parameters, define your own messages to send from the GUI to your plugin, or vice-versa.</p>
+        </div>
+        <img src="/icon-messages-light.svg" className="w-24 xl:w-40 aspect-square dark:hidden"/>
+        <img src="/icon-messages-dark.svg" className="w-24 xl:w-40 aspect-square !hidden dark:!block"/>
+    </div>
+
+    ```rust title="src/lib.rs"
+    #[gui_message(params = MySamplerParams)]
+    pub enum GuiMessage { LoadSample(String), RemoveSample }
+
+    #[plugin_message(params = MySamplerParams)]
+    pub enum PluginMessage { SampleLoaded(Vec<f32>) }
+    ```
+</section>
+
+<section className="flex flex-col items-center justify-center gap-4">
+    ## Try React-Plug!
+    <LinkButton class="text-lg" style="margin-inline-end: 0; margin: 0" href="/guides/quick-start">Quick Start</LinkButton>
+</section>

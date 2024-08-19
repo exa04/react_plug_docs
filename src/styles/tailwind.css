@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+h1,
+h2,
+h3,
+h4 {
+    font-family: "InterDisplay", sans-serif;
+}
+
+[data-has-hero] .page {
+    background: linear-gradient(215deg, theme(colors.accent.300 / 25%), transparent 40%),
+    radial-gradient(theme(colors.accent.300 / 30%), transparent 40%) no-repeat -90vw -40vh /
+            150vw 200vh;
+}

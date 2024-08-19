@@ -1,8 +1,5 @@
 ---
-import { Badge, CardGrid, LinkCard } from "@astrojs/starlight/components";
-import StarlightPage from "@astrojs/starlight/components/StarlightPage.astro";
-import ReleaseInfo from "../../components/ReleaseInfo.astro";
-import { getCollection, getEntry } from "astro:content";
+import { getCollection } from "astro:content";
 
 const releaseNotes = await getCollection("release-notes");
 
