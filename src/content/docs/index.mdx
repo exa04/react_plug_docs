@@ -22,17 +22,17 @@ import {
     Card, CardGrid, LinkCard, LinkButton, TabItem, Tabs,
 } from "@astrojs/starlight/components";
 
-<section className="mb-32 flex flex-col gap-4">
-    <div className="flex gap-4 items-stretch max-xl:flex-col">
-        <div>
-            <div className="text-gray-500 dark:text-gray-400 text-lg">Why React-Plug?</div>
-            <h2 className="!mt-0 xl:!text-5xl">React-Plug is the simplest way of creating a VST3 / CLAP plug-in with Rust and React.</h2>
-            <p className="text-gray-500 dark:text-gray-400 text-lg">React-Plug is a framework that works on top of [`nih-plug`](github.com/robbert-vdh/nih-plug). It offers a really streamlined way to create Rust / React audio plugins. Also, it provides strongly typed TypeScript bindings for your Rust code and leverages code-generating macros for a delightful developer experience.</p>
-
-            :::caution[Stability]
-            This framework is still very early in development. Do not use it in production!
-            :::
+<section className="mb-32">
+    <div>
+        <div className="text-gray-500 dark:text-gray-400 text-lg">Why React-Plug?</div>
+        <h2 className="!mt-0 xl:!text-5xl xl:!leading-tight">React-Plug is the simplest way of creating a VST3 / CLAP plug-in with Rust and React.</h2>
+        <div className="max-w-2xl">
+            <p className="text-gray-500 dark:text-gray-400 text-lg">It's a framework that works on top of [`nih-plug`](github.com/robbert-vdh/nih-plug) to offer a really streamlined way of creating Rust / React audio plugins. Out of the box, it gives you strongly typed access to your plugin's state, from your React code. It leverages code-generating macros for a delightful developer experience.</p>
         </div>
+        :::caution[Stability]
+        This framework is still very early in development.
+        Do not use it in production!
+        :::
     </div>
 </section>
 
@@ -100,9 +100,9 @@ import {
             <div className="bg-gray-50 dark:bg-gray-800 border rounded-xl border-gray-300 dark:border-gray-700 dark:outline dark:outline-1 dark:outline-gray-950 select-none shadow-xl dark:shadow-black/30">
                 <div className="h-6 flex items-center border-b dark:border-black relative">
                     <div className="flex gap-1 ml-1.5">
-                        <div className="w-3.5 h-3.5 bg-gray-300 dark:bg-gray-500 rounded-lg"/>
-                        <div className="w-3.5 h-3.5 bg-gray-300 dark:bg-gray-500 rounded-lg"/>
-                        <div className="w-3.5 h-3.5 bg-gray-300 dark:bg-gray-500 rounded-lg"/>
+                        <div className="w-3.5 h-3.5 bg-gray-300 dark:bg-gray-700 rounded-lg"/>
+                        <div className="w-3.5 h-3.5 bg-gray-300 dark:bg-gray-700 rounded-lg"/>
+                        <div className="w-3.5 h-3.5 bg-gray-300 dark:bg-gray-700 rounded-lg"/>
                     </div>
                     <div className="text-sm font-medium text-gray-500 absolute w-full text-center">Gain Plugin</div>
                 </div>
@@ -119,23 +119,33 @@ import {
     <div className="flex gap-4 xl:items-center justify-between max-xl:flex-col-reverse">
         <div className="">
             <div className="text-gray-500 dark:text-gray-400 text-lg">Messages</div>
-            <h2 className="!mt-0 max-w-lg">Define messages for<br/>plugin-to-GUI communication</h2>
+            <h2 className="!mt-0 max-w-lg">Add your own messages for<br/>plugin-to-GUI communication</h2>
             <p className="text-gray-500 dark:text-gray-400 max-w-xl">For updates and state that aren't related to parameters, define your own messages to send from the GUI to your plugin, or vice-versa.</p>
         </div>
         <img src="/icon-messages-light.svg" className="w-24 xl:w-40 aspect-square dark:hidden"/>
         <img src="/icon-messages-dark.svg" className="w-24 xl:w-40 aspect-square !hidden dark:!block"/>
     </div>
 
-    ```rust title="src/lib.rs"
-    #[gui_message(params = MySamplerParams)]
-    pub enum GuiMessage { LoadSample(String), RemoveSample }
+    <div className="flex not-content justify-stretch w-full [&>*]:grow gap-4">
+        ```rust title="src/lib.rs"
+        #[gui_message(params = MySamplerParams)]
+        pub enum GuiMessage {
+            LoadSample(String),
+            RemoveSample
+        }
+        ```
 
-    #[plugin_message(params = MySamplerParams)]
-    pub enum PluginMessage { SampleLoaded(Vec<f32>) }
-    ```
+        ```rust title="src/lib.rs"
+        #[plugin_message(params = MySamplerParams)]
+        pub enum PluginMessage {
+            SampleLoaded(Vec<f32>)
+            SampleLoadingError(String)
+        }
+        ```
+    </div>
 </section>
 
 <section className="flex flex-col items-center justify-center gap-4">
     ## Try React-Plug!
-    <LinkButton class="text-lg" style="margin-inline-end: 0; margin: 0" href="/guides/quick-start">Quick Start</LinkButton>
+    <LinkButton icon="right-arrow" class="text-lg" style="margin-inline-end: 0; margin: 0" href="/guides/quick-start">Quick Start</LinkButton>
 </section>
